@@ -18,7 +18,7 @@
     margin-bottom: 4px;
     clear: both;
     display: inline-block;
-    width: 103%;
+    width: 96%;
 }
 
 .completer-selected-row {
@@ -31,7 +31,7 @@
 }
 
 .completer-image-default {
-    width: 16px; 
+    width: 16px;
     height: 16px;
     background-image: url("demo/res/img/default.png");
 }
@@ -43,4 +43,16 @@
 .completer-item-text-image {
     float: right;
     width: 90%;
+}
+
+.completer-category {
+    width: 100%;
+    color: white;
+    background-color: brown;
+    clear: both;
+    display: inline-block;
+}
+
+.match {
+    font-weight: bold;
 }

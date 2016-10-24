@@ -8,8 +8,8 @@ export abstract class CompleterBaseData extends Subject<CompleterItem[]> impleme
 
     protected _searchFields: string;
     protected _titleField: string;
-    protected _descriptionField: string;
-    protected _imageField: string;
+    // protected _descriptionField: string;
+    // protected _imageField: string;
 
     constructor() {
         super();
@@ -29,15 +29,15 @@ export abstract class CompleterBaseData extends Subject<CompleterItem[]> impleme
         return this;
     }
 
-    public descriptionField(descriptionField: string) {
-        this._descriptionField = descriptionField;
-        return this;
-    }
+    // public descriptionField(descriptionField: string) {
+    //     this._descriptionField = descriptionField;
+    //     return this;
+    // }
 
-    public imageField(imageField: string) {
-        this._imageField = imageField;
-        return this;
-    }
+    // public imageField(imageField: string) {
+    //     this._imageField = imageField;
+    //     return this;
+    // }
 
     protected extractMatches(data: any[], term: string) {
         let matches: any[] = [];
@@ -91,12 +91,13 @@ export abstract class CompleterBaseData extends Subject<CompleterItem[]> impleme
 
     protected processResults(matches: string[], term: string): CompleterItem[] {
         let i: number;
-        let description: string;
-        let image: string;
+        // let description: string;
+        // let image: string;
         let text: string;
         let formattedText: string;
         let formattedDesc: string;
         let results: CompleterItem[] = [];
+        let indexList ={};
 
         if (matches && matches.length > 0) {
 
@@ -105,25 +106,47 @@ export abstract class CompleterBaseData extends Subject<CompleterItem[]> impleme
                     text = formattedText = this.extractTitle(matches[i]);
                 }
 
-                description = "";
-                if (this._descriptionField) {
-                    description = formattedDesc = this.extractValue(matches[i], this._descriptionField);
-                }
+                // description = "";
+                // if (this._descriptionField) {
+                //     description = formattedDesc = this.extractValue(matches[i], this._descriptionField);
+                // }
 
-                image = null;
-                if (this._imageField) {
-                    image = this.extractValue(matches[i], this._imageField);
-                }
+                // image = null;
+                // if (this._imageField) {
+                //     image = this.extractValue(matches[i], this._imageField);
+                // }
 
                 results.push({
                     title: formattedText,
-                    description: formattedDesc,
-                    image: image,
+                    // description: formattedDesc,
+                    // image: image,
+                    category:  matches[i]['category'],
                     originalObject: matches[i]
                 });
             }
 
         }
-        return results;
+        return results.sort(this.compare);
+    }
+
+    private compare(a, b) {
+        if (a.category < b.category)
+            return -1;
+        if (a.category > b.category)
+            return 1;
+        return 0;
+    }
+
+    private getCategoryIndexs(data:any, property:string) {
+        let values = [], indexList={};
+        for (let i = 0; i < data.length; i++) {
+            let val = data[i][property];
+            let index = values.indexOf(val);
+            if (index === -1) {
+                values.push(val);
+                indexList[val]=i;
+            }
+        }
+        return indexList;
     }
 }
