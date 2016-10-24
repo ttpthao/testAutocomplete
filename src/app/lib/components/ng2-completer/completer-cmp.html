@@ -8,6 +8,7 @@
             <div *ngIf="searchActive && displaySearching" class="completer-searching">{{textSearching}}</div>
             <div *ngIf="!searchActive && (!items || items.length === 0)" class="completer-no-results">{{textNoResults}}</div>
             <div class="completer-row-wrapper" *ngFor="let item of items; let rowIndex=index">
+                <span class="completer-category" *ngIf="canShowCategory(items,item, rowIndex)">{{item.category}}</span>
                 <div class="completer-row" [ctrRow]="rowIndex" [dataItem]="item">
                     <div *ngIf="item.image || item.image === ''" class="completer-image-holder">
                         <img *ngIf="item.image != ''" src="{{item.image}}" class="completer-image" />

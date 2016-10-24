@@ -50,6 +50,7 @@ export class CompleterCmp implements OnInit, ControlValueAccessor {
     private searchStr = "";
     private _onTouchedCallback: () => void = noop;
     private _onChangeCallback: (_: any) => void = noop;
+    private _categoryIndex = {};
 
     constructor() { }
 
@@ -59,7 +60,20 @@ export class CompleterCmp implements OnInit, ControlValueAccessor {
         if (v !== this.searchStr) {
             this.searchStr = v;
             this._onChangeCallback(v);
+            this._categoryIndex = {};
         }
+    }
+
+    public canShowCategory(list, item, index) {
+        var firstIndex=0;
+        for (var i = 0; i < list.length; i++){
+        //neu category chua co thi hien, da co thi ko hien
+            if (JSON.stringify(list[i]['category']) === JSON.stringify(item['category'])){
+                firstIndex=i;
+                break;
+            }
+        }
+        return firstIndex===index;
     }
 
     public onTouched() {
