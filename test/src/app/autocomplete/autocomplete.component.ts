@@ -3,9 +3,7 @@ import { CompleterItem } from './autocompleteItem';
 import { AutocompleteService } from './autocomplete.service';
 import { AutocompleteParam } from './autocompleteParam';
 import { Http } from '@angular/http';
-import { CtrCompleter } from "./directives/ctr-completer";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import "rxjs/add/operator/catch";
 
 const noop = () => { };
 const COMPLETER_CONTROL_VALUE_ACCESSOR = {
@@ -22,8 +20,8 @@ const COMPLETER_CONTROL_VALUE_ACCESSOR = {
 })
 export class AutocompleteComponent implements OnInit {
   @Input() param: AutocompleteParam;
-
   @Output() public blur = new EventEmitter<void>();
+  @Output() public ngModelChange: EventEmitter<any> = new EventEmitter()
   private _results = [];
   private _searchString: string = '';
   private _onTouchedCallback: () => void = noop;
@@ -31,8 +29,6 @@ export class AutocompleteComponent implements OnInit {
   private isInitialized: boolean = false;
   private _isRequesting: boolean = false;
   private _latestRequestString: string = '';
-  @Output() public ngModelChange: EventEmitter<any> = new EventEmitter()
-  @ViewChild(CtrCompleter) private completer: CtrCompleter;
 
   constructor(private _autocompleteService: AutocompleteService) {
   }
@@ -40,20 +36,6 @@ export class AutocompleteComponent implements OnInit {
   ngOnInit() {
   }
 
-  get value(): any {
-    return this._searchString;
-  };
-
-  set value(value: any) {
-    if (value !== this._searchString) {
-      this._searchString = value;
-      this._onChangeCallback(value);
-      this.search();
-    }
-  }
-  public onTouched() {
-    this._onTouchedCallback();
-  }
   public registerOnChange(fn: any) {
     this._onChangeCallback = fn;
   }
@@ -70,7 +52,6 @@ export class AutocompleteComponent implements OnInit {
     let self = this;
     setTimeout(function () {
       self.isInitialized = false;
-      self.onTouched();
     }, 200);
   }
 
