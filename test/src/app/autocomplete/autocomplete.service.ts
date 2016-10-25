@@ -1,25 +1,30 @@
-import { Injectable } from '@angular/core';
-import { AutocompleteParam } from './autocompleteParam';
-import { Http, Headers } from '@angular/http';
+import { Injectable, Optional } from '@angular/core';
+import { Http, Headers, Response } from '@angular/http';
 
 @Injectable()
+
 export class AutocompleteService {
   public url: string = "";
   private headers: Headers;
 
-  constructor(private _http: Http, private _param: AutocompleteParam) {
-    this.url = _param.url;
+  constructor(private _http: Http) {
     this.headers = new Headers();
     this.headers.append('Content-Type', 'application/json');
     this.headers.append('Accept', 'application/json');
   }
 
-  getAutocomplete(onSuccess?: (result?: any) => void, onFail?: (error?: any) => void): void {
+  getAutocomplete(searchString: string, beforeSend?: (result?: any) => void, onSuccess?: (result?: any) => void, onFail?: (error?: any) => void): void {
     let self = this;
-    self._http.get(this.url).subscribe(result => {
-      if (onSuccess) onSuccess(result);
+    beforeSend();
+    self._http.get(this.url + '?query=' + searchString)
+    .subscribe((result:Response) => {
+      if (onSuccess) onSuccess(result.json());
     }, error => {
       if (onFail) onFail(error);
     });
+  }
+
+  setUrl(value: string){
+    this.url = value;
   }
 }

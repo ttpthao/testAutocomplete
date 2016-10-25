@@ -1,29 +1,15 @@
-<div class="completer-holder" ctrCompleter>
-  <!--<input class="completer-input" ctrInput [(ngModel)]="searchStr" [attr.name]="inputName" [placeholder]="placeholder" [attr.maxlength]="maxChars"
-    [disabled]="disableInput" [clearSelected]="clearSelected" [overrideSuggested]="overrideSuggested" (blur)="onBlur()" autocomplete="off"
-    autocorrect="off" autocapitalize="off" />-->
+<div class="completer-holder" ctrCompleter  (focusout)="onBlur()">
+  <input class="completer-input" ctrInput [(ngModel)]="_searchString" autocomplete="off" (keyup)="changeValue()" [placeholder]="param.placeholder"
+    autocorrect="off" autocapitalize="off" (focus)="onFocus()"/>
 
   <div class="completer-dropdown-holder">
-    <div class="completer-dropdown" ctrDropdown>
-      <div *ngIf="searchActive && displaySearching" class="completer-searching">{{textSearching}}</div>
-      <div *ngIf="!searchActive && (!data || data.length === 0)" class="completer-no-results">{{textNoResults}}</div>
-      {{data}}
-      <div class="completer-row-wrapper" *ngFor="let item of convertArray(data);">
-
-        <div *ngIf=" hasGroupTitle ">
-          <span class="completer-category " *ngIf="hasGroupTitle && item.length>0">{{rowIndex}}</span>
-          <div class="completer-row" *ngFor="let detail of item; let detailId = index">
-            <div class="completer-item-text">
-              {{detail}}
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="!hasGroupTitle">
-          <div class="completer-row">
-            <div class="completer-item-text">
-              {{item}}
-            </div>
+    <div class="completer-dropdown" ctrDropdown *ngIf="isInitialized">
+      <div *ngIf="searchActive && displaySearching" class="completer-searching">...</div>
+      <div *ngIf="!searchActive && (!_results || _results.length == 0)" class="completer-no-results">No data</div>
+      <div class="completer-row-wrapper" *ngFor="let item of _results; let itemIndex = index">
+        <span class="completer-category " *ngIf="canShowCategory(_results, item, itemIndex)">{{item.category}}</span>
+        <div class="completer-row" (click)="selectItem(item.title)">
+          <div class="completer-item-text" [innerHTML]="item.title">
           </div>
         </div>
       </div>

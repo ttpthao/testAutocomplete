@@ -5,20 +5,17 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
-import { AutocompleteItemComponent } from './autocomplete-item/autocomplete-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AutocompleteComponent,
-    AutocompleteItemComponent
+    AutocompleteComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
