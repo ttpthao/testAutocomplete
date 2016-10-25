@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AutocompleteParam } from './autocompleteParam';
-import { Http, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Http, Headers } from '@angular/http';
 
 @Injectable()
 export class AutocompleteService {
@@ -15,7 +14,12 @@ export class AutocompleteService {
     this.headers.append('Accept', 'application/json');
   }
 
-  getAutocomplete() {
-    return this._http.get(this.url);
+  getAutocomplete(onSuccess?: (result?: any) => void, onFail?: (error?: any) => void): void {
+    let self = this;
+    self._http.get(this.url).subscribe(result => {
+      if (onSuccess) onSuccess(result);
+    }, error => {
+      if (onFail) onFail(error);
+    });
   }
 }
